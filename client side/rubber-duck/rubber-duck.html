@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Duck - Your Problem Solver</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <header>
+        <img src="duck.png" alt="Mr. Duck Logo" id="logo">
+        <h1>Mr. Duck</h1>
+        <p id="duckMessage" class="hidden"></p>
+    </header>
+
+    <main>
+        <h2>Explain your problem to Mr. Duck</h2>
+        <textarea id="problemInput" placeholder="Describe your problem here..."></textarea>
+        <button id="sendButton">Send to Mr. Duck</button>
+        <p id="responseMessage"></p>
+        <h2>What you said to Mr Duck:</h2>
+        <ul id="messageList"></ul>
+
+    </main>
+
+    <script src="script.js"> </script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4cbcb;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #474545;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+        #logo {
+            width: 200px;
+            height: 200px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        #duckMessage {
+            margin-top: 10px;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #696565;
+        }
+
+        #responseMessage {
+            margin-top: 10px;
+        }
+
+        #messageList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #messageList li {
+            margin-bottom: 5px;
+        }
+    </style>
+</body>
+</html>
