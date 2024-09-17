@@ -26,42 +26,42 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Function to save the message to the database
-function saveMessageToDB(message) {
-    fetch('http://localhost:3000/messages', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message }),
-        mode: 'no-cors'
-    })
-    .then(response => {
+async function saveMessageToDB(message) {
+    try {
+        const response = await fetch('http://localhost:3000/messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message }),
+            mode: 'no-cors'
+        });
         if (response) {
             console.log('Message saved to database');
         } else {
             console.error('Failed to save message to database');
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error saving message to database:', error);
-    });
+    }
 }
 
 // Function to retrieve messages from the database and update the message list
-function retrieveMessagesAndUpdateList() {
-    // Retrieve messages from the database
-    fetch('http://localhost:3000/messages')
-        .then(response => response.json())
-        .then(data => {
-            
-            // Process the retrieved messages
+async function retrieveMessagesAndUpdateList() {
+    try {
+        // Retrieve messages from the database
+        const response = await fetch('http://localhost:3000/messages');
+        if (response.ok) {
+            const data = await response.json();
             const messages = data;
             
             updateMessageList(messages);
-        })
-        .catch(error => {
-            console.error('Error retrieving messages from the database:', error);
-        });
+        } else {
+            console.error('Error retrieving messages from the database:', response.status);
+        }
+    } catch (error) {
+        console.error('Error retrieving messages from the database:', error);
+    }
 }
 
 // Function to update the message list in the DOM
@@ -78,19 +78,19 @@ function updateMessageList(messages) {
 
 // Event listener for the send button
 const sendButton = document.getElementById('sendButton');
-sendButton.addEventListener('click', () => {
+sendButton.addEventListener('click', async () => {
     const problemInput = document.getElementById('problemInput');
     const message = problemInput.value;
     saveMessageToDB(message);
     problemInput.value = '';
-    retrieveMessagesAndUpdateList();
+    await retrieveMessagesAndUpdateList();
 });
 
 
 // Call the function to retrieve messages and update the list
 // Event listener for the load event
-window.addEventListener('load', () => {
-    retrieveMessagesAndUpdateList();
+window.addEventListener('load', async () => {
+    await retrieveMessagesAndUpdateList();
 });
 
 
