@@ -25,24 +25,54 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Retrieve messages from LocalStorage
-let messages = JSON.parse(localStorage.getItem('messages')) || [];
+// Function to save the message to the database
+function saveMessageToDB(message) {
+    fetch('http://localhost:3000/messages', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message }),
+        mode: 'no-cors'
+    })
+    .then(response => {
+        if (response) {
+            console.log('Message saved to database');
+        } else {
+            console.error('Failed to save message to database');
+        }
+    })
+    .catch(error => {
+        console.error('Error saving message to database:', error);
+    });
+}
 
-// Function to add a message to the array and update the DOM
-function addMessage(message) {
-    messages.push(message);
-    localStorage.setItem('messages', JSON.stringify(messages));
-    updateMessageList();
+// Function to retrieve messages from the database and update the message list
+function retrieveMessagesAndUpdateList() {
+    // Retrieve messages from the database
+    fetch('http://localhost:3000/messages')
+        .then(response => response.json())
+        .then(data => {
+            
+            // Process the retrieved messages
+            const messages = data;
+            
+            updateMessageList(messages);
+        })
+        .catch(error => {
+            console.error('Error retrieving messages from the database:', error);
+        });
 }
 
 // Function to update the message list in the DOM
-function updateMessageList() {
+function updateMessageList(messages) {
     const messageList = document.getElementById('messageList');
     messageList.innerHTML = '';
     messages.forEach((message) => {
-    const li = document.createElement('li');
-    li.textContent = message;
-    messageList.appendChild(li);
+        
+        const li = document.createElement('li');
+        li.textContent = message.message;
+        messageList.appendChild(li);
     });
 }
 
@@ -51,11 +81,54 @@ const sendButton = document.getElementById('sendButton');
 sendButton.addEventListener('click', () => {
     const problemInput = document.getElementById('problemInput');
     const message = problemInput.value;
-    addMessage(message);
+    saveMessageToDB(message);
     problemInput.value = '';
+    retrieveMessagesAndUpdateList();
 });
 
+
+// Call the function to retrieve messages and update the list
 // Event listener for the load event
 window.addEventListener('load', () => {
-    updateMessageList();
+    retrieveMessagesAndUpdateList();
 });
+
+
+
+
+
+
+// // Retrieve messages from LocalStorage
+// let messages = JSON.parse(localStorage.getItem('messages')) || [];
+
+// // Function to add a message to the array and update the DOM
+// function addMessage(message) {
+//     messages.push(message);
+//     localStorage.setItem('messages', JSON.stringify(messages));
+//     updateMessageList();
+// }
+
+// // Function to update the message list in the DOM
+// function updateMessageList() {
+//     const messageList = document.getElementById('messageList');
+//     messageList.innerHTML = '';
+//     messages.forEach((message) => {
+//     const li = document.createElement('li');
+//     li.textContent = message;
+//     messageList.appendChild(li);
+//     });
+// }
+
+// // Event listener for the send button
+// const sendButton = document.getElementById('sendButton');
+// sendButton.addEventListener('click', () => {
+//     const problemInput = document.getElementById('problemInput');
+//     const message = problemInput.value;
+//     addMessage(message);
+//     problemInput.value = '';
+// });
+
+// // Event listener for the load event
+// window.addEventListener('load', () => {
+//     updateMessageList();
+// });
